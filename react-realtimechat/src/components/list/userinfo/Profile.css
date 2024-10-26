@@ -1,0 +1,102 @@
+.profile-container{
+    width: 35%;
+    height: 100%;
+    background-color: rgba(17, 25, 40, 0.968);
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    z-index: 999;
+    overflow-y: scroll;
+
+    .exit-item {
+        color:white;       
+        float: right;
+        border-radius: 10%;
+       
+        i {
+            cursor: pointer;
+            margin: auto;
+            font-size: large;
+            padding: 8px;
+        }
+        
+    
+    }
+
+    .content-container{
+        .avatar-container {
+            padding-bottom: 5%;
+
+            img {
+                width: 25%;
+                height: 25%;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+            i {
+                font-size: medium;
+            }
+
+        }
+
+        .edit-container {
+            padding-bottom: 3%;
+            i {
+                font-size: medium;
+            }
+        }
+        .info-container {
+            font-size: small;
+            text-align: left;
+            padding-left: 10%;
+            padding-bottom: 5%;
+
+        }
+        .active {
+            color: rgb(227, 206, 20);
+        }
+        li {
+            list-style: none;
+            padding-top: 2%;
+            padding-bottom: 2%;
+
+            i {
+                font-size: medium;
+                cursor: pointer;
+            }
+        }
+        span {
+            padding-left: 5%;
+            padding-right: 5%;
+            font-size: 14px;
+        }  
+        
+        .button-container {
+            padding-bottom: 30px;
+            button {
+            padding: 10px 20px;
+            background-color: rgba(231, 84, 40, 0.893);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+
+            &:hover{
+                background-color: rgba(220, 20, 60, 0.796);
+            }
+            }
+            button:disabled,
+            button[disabled]{
+            background-color: rgba(226, 154, 132, 0.893);
+            cursor: default;
+        }
+        
+    }
+}
+    
+}
