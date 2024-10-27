@@ -1,0 +1,140 @@
+
+.containerFriendShip {
+    display: flex;
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    height: 100vh;
+    position: relative;
+    bottom: 10vh;
+    top: 1vh;
+
+    .containerFriendShip2 {
+        width: 87vw;
+        height: 90vh;
+        background-color: rgba(17, 25, 40, 0.75);
+        backdrop-filter: blur(19px) saturate(180%);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.125);
+        display: flex;
+
+
+        .friendShipSidebar {
+            width: 70px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .friendShipList {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            .ChatList {
+                flex: 1;
+                overflow: scroll;
+
+                .Search {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                    padding: 20px;
+
+                    .SearchBar {
+                        flex: 1;
+                        background-color: rgba(17, 25, 40, 0.5);
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+                        border-radius: 10px;
+                        padding: 10px;
+
+                        input {
+                            background-color: transparent;
+                            border: none;
+                            outline: none;
+                            color: white;
+                            flex: 1;
+                        }
+
+                        img {
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
+
+                    .add {
+                        width: 36px;
+                        height: 36px;
+                        background-color: rgba(17, 25, 40, 0.5);
+                        padding: 10px;
+                        border-radius: 10px;
+                        cursor: pointer;
+                    }
+                }
+
+                .item {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                    padding: 20px;
+                    cursor: pointer;
+                    border-bottom: 1px solid #dddddd35;
+
+                    img {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                    }
+
+                    .texts {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+
+                        span {
+                            font-weight: 500;
+                        }
+
+                        p {
+                            font-size: 14px;
+                            font-weight: 300;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        .friendShipChat {
+            flex: 2;
+            border-left: 1px solid #dddddd35;
+            border-right: 1px solid #dddddd35;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .listContainer {
+                display: flex;
+                flex-direction: row;
+                .listAvatar {
+                    flex: 3;
+                }
+
+                .listContent {
+                    flex:8;
+                }
+
+                .listFunction {
+                    flex: 1;
+                }
+            }
+
+        }
+
+        .friendShipDetail {
+            flex: 1;
+        }
+
+    }
+}

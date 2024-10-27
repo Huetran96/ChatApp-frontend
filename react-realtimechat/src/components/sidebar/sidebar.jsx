@@ -8,7 +8,7 @@ import Profile from '../list/userinfo/Profile';
 import GameCenter from './GamCenter';
 import AdminPage from './AdminPage';
 
-const Sidebar = () => {
+const Sidebar = ({ setActiveComponent }) => {
     const { auth, setAuth } = useContext(AuthContext);
     const { hideOverlay, setHideOverLay } = useContext(HideContext);
 
@@ -116,6 +116,10 @@ const Sidebar = () => {
 
         }
     }
+
+  const handleFriendShip = (e) => {
+        setActiveComponent("FriendShip"); // Trigger Friendship component
+    };
     return (
         <div className="side-bar" >
             <div className='bar-top'>
@@ -129,7 +133,8 @@ const Sidebar = () => {
                     <li className="w3-bar-item w3-button" id='message' title='Tin nhắn'>
                         <i className="fa fa-commenting-o" aria-hidden="true"></i>
                     </li>
-                    <li className="w3-bar-item w3-button" id='contact' title='Danh bạ'>
+                      <li key={3} onClick={handleFriendShip} className="w3-bar-item w3-button" id='bar-item'
+                        title='Danh bạ'>
                         <i className="fa fa-address-book-o" aria-hidden="true"></i>
                     </li>
                     <li className="w3-bar-item w3-button" id='notification' title='Thông báo'>
