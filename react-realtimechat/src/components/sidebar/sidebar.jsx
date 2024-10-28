@@ -3,7 +3,7 @@ import './sidebar.css';
 import AuthContext from '../../context/AuthProvider';
 import { toast } from 'react-toastify';
 import HideContext from '../../context/HideProvider';
-import { getAccountAPI, getAllUsersAPI, logoutAPI, myProfileAPI, verifiedGameCenterAPI } from '../../api/userApi';
+import { getAccountAPI, getAllUsersAPI, getAllUsersAPIData, logoutAPI, myProfileAPI, verifiedGameCenterAPI } from '../../api/userApi';
 import Profile from '../list/userinfo/Profile';
 import GameCenter from './GamCenter';
 import AdminPage from './AdminPage';
@@ -19,12 +19,13 @@ const Sidebar = () => {
 
     const [profile, setProfile] = useState({});
     const [user, setUser] = useState({});
-    const [listUser, setListUser] = useState([]);
-    const [isValidGame, setIsValidGame] = useState(false);
+    const [listUser, setListUser] = useState({});
+    const [isValidGame, setIsValidGame] = useState({});
 
     const className = "w3-bar-item w3-button";
     const classNameActive = "w3-bar-item w3-button active";
     const isAdmin = auth.user.roles.includes('ADMIN');
+
     console.log("ADMIN", isAdmin);
 
     useEffect(() => {
@@ -97,6 +98,9 @@ const Sidebar = () => {
         await verifiedGameCenter();
     }
 
+    console.log("check gamecenter sideBar:", isValidGame);
+
+
 
     const handleAdmin = async () => {
         setActive('admin');
@@ -156,7 +160,7 @@ const Sidebar = () => {
             </div>
             {!hideProfile && <Profile infor={profile} user={user} />}
             {!hideGameCenter && <GameCenter isValid={isValidGame} />}
-            {!hideAdmin && <AdminPage users={listUser} />}
+            {!hideAdmin && <AdminPage users={listUser} game={isValidGame} />}
 
 
         </div >

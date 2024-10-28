@@ -3,6 +3,8 @@ import "./login.css";
 import { toast } from "react-toastify";
 import { loginAPI, registerAPI, verifiedAPI } from "../../api/userApi";
 import AuthContext from "../../context/AuthProvider";
+import { HubConnectionBuilder } from "@microsoft/signalr";
+import NotificationContext from "../../context/NotificationProvider";
 
 const USERNAME_REGEX = /^[A-z][A-z0-9]{3,23}$/;
 const PHONE_REGEX = /^[0-9]{10,11}$/;
@@ -11,6 +13,7 @@ const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Login = () => {
     const { setAuth } = useContext(AuthContext);
+    const { setConnection, setNotifications } = useContext(NotificationContext);
     //validate input field login
     const [emailLogin, setEmailLogin] = useState('');
     const [validEmailLogin, setValidEmailLogin] = useState(false);
@@ -82,6 +85,25 @@ const Login = () => {
                 url: URL.createObjectURL(e.target.files[0])
             })
     }
+    const createNotifiConnection = async (message) => {
+        try {
+            const connection = new HubConnectionBuilder()
+                .withUrl("http://localhost:5065/notification-hub")
+                .build();
+
+            connection.on("ReceiveMessage", (user, message) => {
+                console.log("check connectionHUB: ", message);
+                setNotifications(notify => [...notify, message]);
+
+            });
+            setConnection(connection);
+
+            // await connection.start();
+            // await connection.invoke("SendMessage", message);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     const handleLogin = async (e) => {
         e.preventDefault()
@@ -143,6 +165,8 @@ const Login = () => {
             const response = await registerAPI(user);
             if (response.statusCode === 200) {
                 toast.success(response.message);
+                await createNotifiConnection(response.message);
+
                 setUsername('');
                 setPhonenumber('');
                 setEmailRegister('');
@@ -150,7 +174,9 @@ const Login = () => {
                 setMatchPassword('');
             }
             if (response.statusCode === 400) {
-                response.message[0] ? toast.error(response.message[0].description) : toast.error(response.message)
+                //console.log(response.message);
+                toast.error("Error: " + response.message)
+
             }
             //console.log('ckeck register: ', response);
             console.log(response.message[0].description);
@@ -162,6 +188,7 @@ const Login = () => {
 
 
     }
+
     return (
         <div className="login">
             <div className="item">

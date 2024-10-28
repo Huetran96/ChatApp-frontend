@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import './GameCenter.css';
 import HideContext from '../../context/HideProvider';
-import { createTrialAPI, verifiedGameCenterAPI } from '../../api/userApi';
+import { createProAPI, createTrialAPI, verifiedGameCenterAPI } from '../../api/userApi';
 import { toast } from 'react-toastify';
 import AuthContext from '../../context/AuthProvider';
 
@@ -20,23 +20,33 @@ const GameCenter = (props) => {
         }
 
     }
-    useEffect(() => {
-        verifiedGameCenter();
-
-    }, []);
 
     const registerTrial = async () => {
         const res = await createTrialAPI();
         if (res.statusCode === 200) {
             toast.success("Đăng ký bản dùng thử thành công!");
-            setValid(true);
             var token = res.message.value;
             localStorage.setItem('access_token', token);
+            await verifiedGameCenter();
         }
         if (res.statusCode === 400) {
             toast.error(res.message);
         }
         console.log("Trial registered", res);
+
+    }
+    const registerPro = async () => {
+        const res = await createProAPI();
+        if (res.statusCode === 200) {
+            toast.success("Nâng cấp tài khoản thành công.");
+            var token = res.message.value;
+            localStorage.setItem('access_token', token);
+            await verifiedGameCenter();
+        }
+        if (res.statusCode === 400) {
+            toast.error(res.message);
+        }
+        console.log("Pro registered", res);
 
     }
 
@@ -53,7 +63,7 @@ const GameCenter = (props) => {
                         </div>
                         <img src='./game3.webp' />
                     </div>
-                    {valid ?
+                    {valid.isValid ?
                         <>
                             <div className='game-container'>
                                 <button>Chơi ngay</button>
@@ -67,10 +77,10 @@ const GameCenter = (props) => {
                                 <div className="payment">
                                     <h3>Nâng cấp tài khoản để sử dụng dịch vụ</h3>
                                     <div className='payment-item'>
-                                        <button>Gói 6 tháng giá 300.000</button>
+                                        <button onClick={() => registerPro()} >Gói 6 tháng giá 300.000</button>
                                     </div>
                                     <div className='payment-item'>
-                                        <button>Gói 12 tháng giá 500.000 </button>
+                                        <button onClick={() => registerPro()}>Gói 12 tháng giá 500.000 </button>
                                     </div>
 
 

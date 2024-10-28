@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Chat from "./components/chat/Chat";
 import Detail from "./components/detail/Detail";
 import List from "./components/list/List";
@@ -9,12 +9,15 @@ import Sidebar from "./components/sidebar/sidebar";
 import { verifiedAPI } from "./api/userApi";
 import { toast } from "react-toastify";
 import HideContext from "./context/HideProvider";
+import NotificationContext from "./context/NotificationProvider";
 
 const App = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const { hideOverlay } = useContext(HideContext);
+  const { notifications } = useContext(NotificationContext);
   //console.log("check hide APP: ", hide);
   console.log("check auth App", auth);
+  console.log("check notifications App", notifications);
 
 
   useEffect(() => {

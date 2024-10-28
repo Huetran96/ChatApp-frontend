@@ -4,13 +4,16 @@ import App from './App.jsx'
 import './index.css'
 import { AuthProvider } from './context/AuthProvider.jsx'
 import { HideProvider } from './context/HideProvider.jsx'
+import { NotificationProvider } from './context/NotificationProvider.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-      <HideProvider>
-        <App />
-      </HideProvider>
+      <NotificationProvider>
+        <HideProvider>
+          <App />
+        </HideProvider>
+      </NotificationProvider>
     </AuthProvider>
 
   </React.StrictMode>,
