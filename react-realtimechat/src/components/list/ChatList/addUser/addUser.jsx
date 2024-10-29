@@ -59,9 +59,9 @@ const AddUser = () => {
     };
     return (
         <div className="adduser-container">
-            <div className='exit-item'>
-                <i onClick={() => handleExit()} className="fa fa-arrows-alt" aria-hidden="true"></i>
-            </div>
+            {/*<div className='exit-item'>*/}
+            {/*    <i onClick={() => handleExit()} className="fa fa-arrows-alt" aria-hidden="true"></i>*/}
+            {/*</div>*/}
             <div className="addUser">
                 <form onSubmit={handleSearch} className="formAddUser">
                     <input
@@ -82,9 +82,20 @@ const AddUser = () => {
 
                                     <div className="detail">
                                         <img src="./avatar.png" alt="User Avatar"/>
-                                        <span>{user.name}</span> {/* Render user name */}
+                                        <div className="userInfo">
+                                            <div className="userInfoA">
+                                                <span>Tên </span>
+                                                <span>{user.name} </span>
+                                            </div>
+                                            <div className="userInfoB">
+                                                <span>Tel: </span>
+                                                <span>{user.phoneNumber} </span>
+                                            </div>
+
+                                        </div>
+
                                     </div>
-                                    <button
+                                <button
                                         className="buttonAddUser"
                                         type="button"
                                         onClick={() => handleAddFriend(user)}

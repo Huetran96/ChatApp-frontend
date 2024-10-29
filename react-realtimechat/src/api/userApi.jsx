@@ -55,6 +55,7 @@ const createTrialAPI = () => {
     return axios.get(`${END_POINT.CREATE_TRIAL}`);
 
 }
+
 const createProAPI = () => {
 
 }
@@ -65,10 +66,14 @@ const getAllUsersAPI = () => {
     return axios.get(`${END_POINT.GETALL_USERS}`);
 
 }
+const getAllUsersAPIData = (data) => {
+    return axios.get(`${END_POINT.GETALL_USERS}`, { params: data });
+
+}
 
 
 export {
     registerAPI, loginAPI, logoutAPI, verifiedAPI, myProfileAPI, friendProfileAPI, updateProfileAPI,
     createTrialAPI, createProAPI, verifiedGameCenterAPI, getAccountAPI, updateAccountAPI,
-    getAllUsersAPI
+    getAllUsersAPI,getAllUsersAPIData
 };

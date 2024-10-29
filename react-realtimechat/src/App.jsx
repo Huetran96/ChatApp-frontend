@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect } from "react";
 import Chat from "./components/chat/Chat";
 import Detail from "./components/detail/Detail";
 import List from "./components/list/List";
@@ -9,17 +9,13 @@ import Sidebar from "./components/sidebar/sidebar";
 import { verifiedAPI } from "./api/userApi";
 import { toast } from "react-toastify";
 import HideContext from "./context/HideProvider";
-import FriendShip from "./components/friendship/FriendShip.jsx";
 
 const App = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const { hideOverlay } = useContext(HideContext);
   //console.log("check hide APP: ", hide);
   console.log("check auth App", auth);
-const [activeComponent, setActiveComponent] = useState("Friendship")
-  const handleFriendship = (e) => {
-    setActiveComponent("Friendship");
-  };
+
 
   useEffect(() => {
     async function getAccount() {
@@ -60,11 +56,10 @@ const [activeComponent, setActiveComponent] = useState("Friendship")
       }
       {auth.isAuth ? (
         <>
-          <Sidebar handleFriendship={handleFriendship} />
-          {activeComponent === "List" && <List />}
-          {activeComponent === "Chat" && <Chat />}
-          {activeComponent === "Detail" && <Detail />}
-          {activeComponent === "Friendship" && <FriendShip />}
+          <Sidebar />
+          <List />
+          <Chat />
+          <Detail />
         </>
       ) : (
         <Login />)

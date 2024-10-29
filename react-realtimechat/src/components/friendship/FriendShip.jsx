@@ -10,32 +10,30 @@ import {
     listFriendAPI,
     listFriendRequestAPI
 } from "../../api/friendShipApi.jsx";
-import { FaEllipsisV } from 'react-icons/fa';
+import Profile from "../list/userinfo/Profile.jsx";
 
 const FriendShip = () => {
     const {hideOverlay, setHideOverLay} = useContext(HideContext);
+    const [hideList, setHideList] = useState(false);
+    const [hideChat, setHideChat] = useState(false);
+    const [hideDetail, setHideDetail] = useState(true);
     const [hideAdd, setHideAdd] = useState(true);
     const [friends, setFriends] = useState([]); // Trạng thái lưu danh sách bạn bè
     const [activeTab, setActiveTab] = useState("listFriend"); // Trạng thái theo dõi tab đang hoạt động
+    const [selectedFriend, setSelectedFriend] = useState(null); // State for selected friend
 
     // Hàm bật/tắt dropdown menu cho từng bạn bè
     const [isDropdownOpen, setDropdownOpen] = useState(false);
 
     const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
 
-    const { hide, setHide } = useContext(HideContext);
-    const handleAdd = () => {
-        setHide({
-            hideMyProfile: true,
-            hideFriendProfile: true,
-            hideEdit: true,
-            hideAdd: !hide.hideAdd,
-            hideOverlay: !hide.hideOverlay
-        })
-    }
 
+    const handleAdd = () => {
+        setHideAdd(!hideAdd);
+    }
     const handleTabClick = async (tab) => {
         setActiveTab(tab); // Set the active tab state
+        setSelectedFriend(null);
 
         // Fetch data based on the selected tab
         try {
@@ -67,8 +65,6 @@ const FriendShip = () => {
             }
         }
     };
-
-
 
     // Hàm xử lý xóa bạn bè
     const onRemoveFriend = async (phoneNumber) => {
@@ -178,8 +174,6 @@ const FriendShip = () => {
         }
     };
 
-
-
     useEffect(() => {
         if (hideOverlay) {
             setHideAdd(true);
@@ -190,121 +184,207 @@ const FriendShip = () => {
         <div className="containerFriendShip">
             <div className="containerFriendShip2">
                 <div className="friendShipSidebar"></div>
-                <div className="friendShipList">
-                    <div className="ChatList">
-                        <div className="Search">
-                            <div className="SearchBar">
-                                <img src="search.png" alt=""/>
-                                <input type="text" placeholder="Search"/>
+                {!hideList &&
+                    <div className="friendShipList">
+                        <div className="ChatList">
+                            <div className="Search">
+                                <div className="SearchBar">
+                                    <img src="search.png" alt="" className="searchIcon"/>
+                                    <input type="text" placeholder="Search"/>
+                                </div>
+                                <img src={!hideAdd ? "./minus.png" : "./plus.png"} alt=""
+                                     className="add"
+                                     onClick={() => handleAdd()}/>
                             </div>
-                            <img src={!hideAdd ? "./minus.png" : "./plus.png"} alt=""
-                                 className="add"
-                                 onClick={() => handleAdd()}/>
-                        </div>
-                        <div>
-                            <ul>
-                                <li className="item" key={0} onClick={() => handleTabClick("listFriend")}>
-                                    <div className="texts">
-                                        <span>Danh sách bạn bè</span>
-                                    </div>
-                                </li>
-                                <li className="item" key={1} onClick={() => handleTabClick("listBlock")}>
-                                    <div className="texts">
-                                        <span>Danh sách chặn</span>
-                                    </div>
-                                </li>
-                                <li className="item" key={2} onClick={() => handleTabClick("requestedFriend")}>
-                                    <div className="texts">
-                                        <span>Yêu cầu kết bạn</span>
-                                    </div>
-                                </li>
-                                <li className="item" key={3} onClick={() => handleTabClick("receivedFriend")}>
-                                    <div className="texts">
-                                        <span>Lời mời kết bạn</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-
-                        {!hideAdd && <AddUser/>}
-                    </div>
-                </div>
-                <div className="friendShipChat">
-                    {friends.length > 0 ? (
-                        <ul>
-                            {friends.map((friend) => (
-                                <li key={friend.phoneNumber} className="friend-item">
-                                    <div className="listContainer">
-                                        <div className="listAvatar">
-                                            <img src="./avatar.png" alt="User Avatar"/>
+                            <div>
+                                <ul>
+                                    <li className={`item ${activeTab === "listFriend" ? "active" : ""}`} key={0}
+                                        onClick={() => handleTabClick("listFriend")}>
+                                        <div className="texts">
+                                            <span>Danh sách bạn bè</span>
                                         </div>
-                                        <div className="listContent">
-                                            <div>
-                                                <span>Tên</span>
-                                                <p>{friend.name}</p>
-                                            </div>
-                                            <div>
-                                                <span>Số điện thoại</span>
-                                                <p>{friend.phoneNumber}</p>
-                                            </div>
+                                    </li>
+                                    <li className={`item ${activeTab === "listBlock" ? "active" : ""}`} key={1}
+                                        onClick={() => handleTabClick("listBlock")}>
+                                        <div className="texts">
+                                            <span>Danh sách chặn</span>
                                         </div>
-                                        <div className="listFunction">
-                                            {/* Icon to toggle dropdown */}
-                                            <button onClick={toggleDropdown} className="dropdown-icon">
-                                                <FaEllipsisV/>
-                                            </button>
+                                    </li>
+                                    <li className={`item ${activeTab === "requestedFriend" ? "active" : ""}`} key={2}
+                                        onClick={() => handleTabClick("requestedFriend")}>
+                                        <div className="texts">
+                                            <span>Yêu cầu kết bạn</span>
+                                        </div>
+                                    </li>
+                                    <li className={`item ${activeTab === "receivedFriend" ? "active" : ""}`} key={3}
+                                        onClick={() => handleTabClick("receivedFriend")}>
+                                        <div className="texts">
+                                            <span>Lời mời kết bạn</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                            {/* Dropdown menu */}
-                                            {isDropdownOpen && (
-                                                <div className="dropdown-menu">
-                                                    {activeTab === "listFriend" && (
-                                                        <>
-                                                            <button onClick={() => onRemoveFriend(friend.phoneNumber)}>
-                                                                Xóa bạn
-                                                            </button>
-                                                            <button onClick={() => onBlockFriend(friend.phoneNumber)}>
-                                                                Chặn bạn
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                    {activeTab === "listBlock" && (
-                                                        <button onClick={() => unblockFriend(friend.phoneNumber)}>
-                                                            Bỏ chặn
-                                                        </button>
-                                                    )}
-                                                    {activeTab === "requestedFriend" && (
-                                                        <button onClick={() => cancelRequest(friend.phoneNumber)}>
-                                                            Hủy yêu cầu
-                                                        </button>
-                                                    )}
-                                                    {activeTab === "receivedFriend" && (
-                                                        <>
-                                                            <button onClick={() => acceptFriend(friend.phoneNumber)}>
-                                                                Chấp nhận
-                                                            </button>
-                                                            <button onClick={() => rejectFriend(friend.phoneNumber)}>
-                                                                Từ chối
-                                                            </button>
-                                                        </>
-                                                    )}
+
+                            {!hideAdd && <AddUser/>}
+                        </div>
+                    </div>}
+                {!hideChat &&
+                    <div className="friendShipChat">
+                        {friends.length > 0 ? (
+                            <ul className="listFriendShipChat">
+                                {friends.map((friend) => (
+                                    <li key={friend.phoneNumber} className="friend-item"
+                                        onClick={() => setSelectedFriend(friend)}>
+                                        <div className="listContainer">
+                                            <div className="listAvatar">
+                                                <img src="./avatar.png" alt="User Avatar"/>
+                                            </div>
+                                            <div className="listContent">
+                                                <div>
+                                                    <span>Tên</span>
+                                                    <p>{friend.name}</p>
                                                 </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>Hãy chọn một danh sách để xem.</p>
-                    )}
-                </div>
+                                                <div>
+                                                    <span>Số điện thoại</span>
+                                                    <p>{friend.phoneNumber}</p>
+                                                </div>
+                                            </div>
+                                            <div className="listFunction">
+                                                {/* Icon to toggle dropdown */}
+                                                <div className="iconDropdown" onClick={toggleDropdown}>
+                                                    <img
+                                                        src={"./plus.png"}
+                                                        alt=""
+                                                        className="dropdown-icon"
+                                                    />
+                                                </div>
 
-                <div className="friendShipDetail"></div>
+                                                {/* Dropdown menu */}
+                                                {isDropdownOpen && (
+                                                    <div className="contentDropdown">
+                                                        {activeTab === "listFriend" && (
+                                                            <>
+                                                                <button className="buttonDropdown"
+                                                                        onClick={() => onRemoveFriend(friend.phoneNumber)}>
+                                                                    Xóa bạn
+                                                                </button>
+                                                                <button className="buttonDropdown"
+                                                                        onClick={() => onBlockFriend(friend.phoneNumber)}>
+                                                                    Chặn bạn
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                        {activeTab === "listBlock" && (
+                                                            <button className="buttonDropdown"
+                                                                    onClick={() => unblockFriend(friend.phoneNumber)}>
+                                                                Bỏ chặn
+                                                            </button>
+                                                        )}
+                                                        {activeTab === "requestedFriend" && (
+                                                            <button className="buttonDropdown"
+                                                                    onClick={() => cancelRequest(friend.phoneNumber)}>
+                                                                Hủy yêu cầu
+                                                            </button>
+                                                        )}
+                                                        {activeTab === "receivedFriend" && (
+                                                            <>
+                                                                <button className="buttonDropdown"
+                                                                        onClick={() => acceptFriend(friend.phoneNumber)}>
+                                                                    Chấp nhận
+                                                                </button>
+                                                                <button className="buttonDropdown"
+                                                                        onClick={() => rejectFriend(friend.phoneNumber)}>
+                                                                    Từ chối
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>Hãy chọn một danh sách để xem.</p>
+                        )}
+                    </div>
+                }
+
+
+
+                {/* Conditionally render friendShipDetail based on selectedFriend */}
+                {selectedFriend && (
+                    <div className="friendShipDetail">
+                        <div className="detail">
+                            <div className="user">
+                                <img src="./avatar.png" alt=""/>
+                                <h2>{selectedFriend.name}</h2>
+                                <p>Số điện thoại: {selectedFriend.phoneNumber}</p>
+                            </div>
+                            <div className="info">
+                                <div className="option">
+                                    <div className="title">
+                                        <span>Chat Settings</span>
+                                        <img src="./arrowUp.png" alt=""/>
+                                    </div>
+                                </div>
+
+                                <div className="option">
+                                    <div className="title">
+                                        <span>Privacy & help</span>
+                                        <img src="./arrowUp.png" alt=""/>
+                                    </div>
+                                </div>
+
+                                <div className="option">
+                                    <div className="title">
+                                        <span>Shared photos</span>
+                                        <img src="./arrowDown.png" alt=""/>
+                                    </div>
+                                    <div className="photos">
+                                        <div className="photoItem">
+                                            <div className="photoDetail">
+                                                <img src="./camera.png" alt=""/>
+                                                <span>photo_2024_10.png</span>
+                                            </div>
+                                            <img src="./download.png" alt="" className="icon"/>
+                                        </div>
+                                        <div className="photoItem">
+                                            <div className="photoDetail">
+                                                <img src="./camera.png" alt=""/>
+                                                <span>photo_2024_10.png</span>
+                                            </div>
+                                            <img src="./download.png" alt="" className="icon"/>
+                                        </div>
+                                        <div className="photoItem">
+                                            <div className="photoDetail">
+                                                <img src="./camera.png" alt=""/>
+                                                <span>photo_2024_10.png</span>
+                                            </div>
+                                            <img src="./download.png" alt="" className="icon"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div className="option">
+                                    <div className="title">
+                                        <span>Shared Files</span>
+                                        <img src="./arrowUp.png" alt=""/>
+                                    </div>
+                                </div>
+                                <button onClick={() => onBlockFriend(selectedFriend.phoneNumber)}>Block User</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
 
             </div>
-            {!hide.hideAdd && <AddUser/>}
+            {!hideAdd && <AddUser/>}
         </div>
 
 
